@@ -1,8 +1,9 @@
 package wyCash
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 /*　ToDoリスト
@@ -116,7 +117,9 @@ func TestCurrency(t *testing.T) {
 func TestMoneyCalculation(t *testing.T) {
 	assert := assert.New(t)
 	bank := Bank{}
-	sum := NewDollar(3).Plus(NewDollar(4)) // this is not Money but Expression!
+	m := NewDollar(3)
+	pm := &m                     // covert a variable of Money type to one of *Money type cuz Plus method can be called only by an variable of *Money type, not Monney type.
+	sum := pm.Plus(NewDollar(4)) // this is not Money but Expression!
 	reduced := bank.Reduce(sum, DOLLAR)
 	assert.Equal(NewDollar(7), reduced) // <= assert.Equal(NewDollar(10), sum, "")
 }
@@ -124,9 +127,13 @@ func TestMoneyCalculation(t *testing.T) {
 // 問題のテストコードです。
 func TestPlusReturnsSum(t *testing.T) {
 	assert := assert.New(t)
-	result := NewDollar(5).Plus(NewDollar(5)) // this is not Money but Expression!
-	sum := Sum(result)                        // Sum Struct
-	assert.Equal(NewDollar(5), sum.augend)
+	m1 := NewDollar(5)
+	pm1 := &m1                       // covert a variable of Money type to one of *Money type cuz Plus method can be called only by an variable of *Money type, not Monney type.
+	result := pm1.Plus(NewDollar(5)) // this is not Money but Expression!
+	sum := Sum(result)               // Sum Struct. (at this point, the pm1 of *Money type is assiged to sum.augend)
+	m2 := NewDollar(5)
+	pm2 := &m2 // covert a variable of Money type to one of *Money type cuz it will come to be able to comparable as (the same) variable of *Money type with sum.augend in the assertion of the next line.
+	assert.Equal(pm2, sum.augend)
 	assert.Equal(NewDollar(5), sum.addend)
 }
 

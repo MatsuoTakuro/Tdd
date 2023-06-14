@@ -44,6 +44,10 @@ type Money struct {
 	currency Currency
 }
 
+// you can make sure if Money implements Expression interface.
+// FYI, please refer to https://sourjp.github.io/posts/go-interface/
+var _ Expression = (*Money)(nil)
+
 type Expression interface {
 	Reduce(b Bank, c Currency) Money
 }
